@@ -1,185 +1,145 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import api from "../../services/api";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function LoginModal({ isOpen, onClose }) {
-  const [tab, setTab] = useState("password");
+const [tab, setTab] = useState("password");
 
-  if (!isOpen) return null;
+const [username, setUsername] = useState("");
+const [password, setPassword] = useState("");
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+const { login } = useContext(AuthContext);
 
-      <div className="w-full max-w-md rounded-3xl bg-slate-950 border border-slate-800 p-6">
+if (!isOpen) return null;
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+const handleLogin = async () => {
+  try {
+    const response = await api.post("/login", {
+      username,
+      password
+    });
+    console.log(response.data);
+    login(response.data);
 
-          <h1 className="text-3xl font-bold text-yellow-400">
-            RushVerse
-          </h1>
+    alert("Login successful!");
 
-          <button
-            onClick={onClose}
-            className="text-2xl text-slate-400 hover:text-white"
-          >
-            ✕
-          </button>
+    onClose();
+  } catch (error) {
+    alert(
+      error.response?.data?.detail ||
+      "Login failed"
+    );
+  }
+};
+return (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
 
-        </div>
+    <div className="w-full max-w-md rounded-3xl bg-slate-950 border border-slate-800 p-6">
 
-        {/* Tabs */}
-        <div className="flex mb-8 border-b border-slate-700">
+    <div className="flex items-center justify-between mb-8">
 
-          <button
-            onClick={() => setTab("password")}
-            className={`flex-1 py-3 font-semibold ${
-              tab === "password"
-                ? "border-b-2 border-red-500 text-white"
-                : "text-slate-500"
-            }`}
-          >
-            Password Login
-          </button>
+      <h1 className="text-3xl font-bold text-yellow-400">
+        RushVerse
+      </h1>
 
-          <button
-            onClick={() => setTab("otp")}
-            className={`flex-1 py-3 font-semibold ${
-              tab === "otp"
-                ? "border-b-2 border-red-500 text-white"
-                : "text-slate-500"
-            }`}
-          >
-            OTP Login
-          </button>
-
-        </div>
-
-        {/* PASSWORD LOGIN */}
-
-        {tab === "password" && (
-          <>
-
-            <input
-              type="text"
-              placeholder="Email or Phone Number"
-              className="
-                w-full
-                p-4
-                rounded-xl
-                bg-slate-900
-                border
-                border-slate-700
-                mb-4
-                focus:outline-none
-                focus:border-red-500
-              "
-            />
-
-            <input
-              type="password"
-              placeholder="Enter Password"
-              className="
-                w-full
-                p-4
-                rounded-xl
-                bg-slate-900
-                border
-                border-slate-700
-                mb-4
-                focus:outline-none
-                focus:border-red-500
-              "
-            />
-
-            <p className="text-center text-red-400 mb-6 cursor-pointer">
-              Forgot Password?
-            </p>
-
-          </>
-        )}
-
-        {/* OTP LOGIN */}
-
-        {tab === "otp" && (
-          <>
-
-            <input
-              type="text"
-              placeholder="Email or Phone Number"
-              className="
-                w-full
-                p-4
-                rounded-xl
-                bg-slate-900
-                border
-                border-slate-700
-                mb-4
-                focus:outline-none
-                focus:border-red-500
-              "
-            />
-
-            <div className="flex gap-2 mb-6">
-
-              <input
-                type="text"
-                placeholder="Enter OTP"
-                className="
-                  flex-1
-                  p-4
-                  rounded-xl
-                  bg-slate-900
-                  border
-                  border-slate-700
-                  focus:outline-none
-                  focus:border-red-500
-                "
-              />
-
-              <button
-                className="
-                  bg-white
-                  text-black
-                  px-4
-                  rounded-xl
-                  font-semibold
-                "
-              >
-                Get OTP
-              </button>
-
-            </div>
-
-          </>
-        )}
-
-        {/* LOGIN BUTTON */}
-
-        <button
-          className="
-            w-full
-            bg-red-500
-            hover:bg-red-600
-            py-4
-            rounded-full
-            font-bold
-            text-lg
-            transition
-          "
-        >
-          LOGIN
-        </button>
-
-        {/* Footer */}
-
-        <p className="text-center text-slate-400 mt-6">
-          Need an account?{" "}
-          <span className="text-red-500 font-bold cursor-pointer">
-            SIGN UP
-          </span>
-        </p>
-
-      </div>
+      <button
+        onClick={onClose}
+        className="text-2xl text-slate-400 hover:text-white"
+      >
+        ✕
+      </button>
 
     </div>
+
+    <div className="flex mb-8 border-b border-slate-700">
+
+      <button
+        onClick={() => setTab("password")}
+        className={`flex-1 py-3 font-semibold ${
+          tab === "password"
+            ? "border-b-2 border-red-500 text-white"
+            : "text-slate-500"
+        }`}
+      >
+        Password Login
+      </button>
+
+      <button
+        onClick={() => setTab("otp")}
+        className={`flex-1 py-3 font-semibold ${
+          tab === "otp"
+            ? "border-b-2 border-red-500 text-white"
+            : "text-slate-500"
+        }`}
+      >
+        OTP Login
+      </button>
+
+    </div>
+
+    {tab === "password" && (
+      <>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) =>
+            setUsername(e.target.value)
+          }
+          className="
+            w-full
+            p-4
+            rounded-xl
+            bg-slate-900
+            border
+            border-slate-700
+            mb-4
+          "
+        />
+
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) =>
+            setPassword(e.target.value)
+          }
+          className="
+            w-full
+            p-4
+            rounded-xl
+            bg-slate-900
+            border
+            border-slate-700
+            mb-4
+          "
+        />
+      </>
+    )}
+
+    {tab === "otp" && (
+      <div className="text-center text-slate-400 mb-6">
+        OTP Login Coming Soon
+      </div>
+    )}
+
+    <button
+      onClick={handleLogin}
+      className="
+        w-full
+        bg-red-500
+        hover:bg-red-600
+        py-4
+        rounded-full
+        font-bold
+        text-lg
+      "
+    >
+      LOGIN
+    </button>
+
+  </div>
+      </div>
+   
   );
 }

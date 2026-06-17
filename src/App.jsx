@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import History from "./pages/History";
+import Tower from "./pages/Tower";
+
 import Home from "./pages/Home";
 import ColorPrediction from "./pages/ColorPrediction";
-import TowerRush from "./pages/TowerRush";
-import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -14,21 +15,21 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route
-          path="/color"
+          path="/prediction"
           element={<ColorPrediction />}
         />
-
         <Route
-          path="/tower"
-          element={<TowerRush />}
-        />
+  path="/tower"
+  element={<Tower />}
+/>
+<Route
+  path="/history"
+  element={<History />}
+/>
 
-        <Route
-          path="/profile"
-          element={<Profile />}
-        />
 
       </Routes>
+      
 
     </BrowserRouter>
   );

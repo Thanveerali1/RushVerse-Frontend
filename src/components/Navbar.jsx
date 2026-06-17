@@ -1,91 +1,103 @@
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import rushverseLogo from "../assets/logo/rushverse_logo.png";
 import LoginModal from "./auth/LoginModal";
 import SignupModal from "./auth/SignupModal";
-import SideDrawer from "./SideDrawer";
 
-export default function Navbar() {
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [signupOpen, setSignupOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+import { AuthContext } from "../context/AuthContext";
+
+export default function Navbar({ setSidebarOpen }) {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <>
-      {/* Navbar */}
-      <div className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800">
+      <nav className="h-14 bg-[#0b1630] border-b border-purple-500/20">
+        <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-4">
 
-        <div className="flex items-center justify-between p-4">
-
-          {/* Menu Button */}
           <button
-            onClick={() => setDrawerOpen(true)}
-            className="text-2xl text-white"
+            onClick={() => setSidebarOpen(true)}
+            className="text-3xl text-white hover:text-fuchsia-400 transition"
           >
             ☰
           </button>
 
-          {/* Logo */}
-          <h1 className="font-bold text-2xl text-yellow-400">
-            RushVerse
-          </h1>
+          <img
+  src={rushverseLogo}
+  alt="RushVerse"
+  className="
+    h-15
+    object-contain
+    drop-shadow-lg
+  "
+/>
 
-          {/* Auth Buttons */}
-          <div className="flex gap-2">
+          {!user ? (
+            <div className="flex gap-2">
 
-            <button
-              onClick={() => setLoginOpen(true)}
-              className="
-                bg-green-500
-                hover:bg-green-600
-                px-3
-                py-2
-                rounded-full
-                text-sm
-                font-semibold
-                transition
-              "
-            >
-              Login
-            </button>
+              <button
+                onClick={() => setShowLogin(true)}
+                className="
+                  px-5 py-2
+                  rounded-full
+                  bg-red-500
+                  hover:bg-red-600
+                  font-semibold
+                "
+              >
+                Login
+              </button>
 
-            <button
-              onClick={() => setSignupOpen(true)}
-              className="
-                bg-purple-500
-                hover:bg-purple-600
-                px-3
-                py-2
-                rounded-full
-                text-sm
-                font-semibold
-                transition
-              "
-            >
-              Sign Up
-            </button>
+              <button
+                onClick={() => setShowSignup(true)}
+                className="
+                  px-5 py-2
+                  rounded-full
+                  bg-white
+                  text-red-500
+                  hover:bg-gray-200
+                  font-semibold
+                "
+              >
+                Sign Up
+              </button>
 
-          </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
 
+              <span className="text-fuchsia-300 font-semibold">
+                {user.username}
+              </span>
+
+              <button
+                onClick={logout}
+                className="
+                  px-4 py-2
+                  rounded-full
+                  bg-red-500
+                  hover:bg-red-600
+                  text-white
+                  font-semibold
+                "
+              >
+                Logout
+              </button>
+
+            </div>
+          )}
         </div>
+      </nav>
 
-      </div>
-
-      {/* Login Modal */}
       <LoginModal
-        isOpen={loginOpen}
-        onClose={() => setLoginOpen(false)}
+        isOpen={showLogin}
+        onClose={() => setShowLogin(false)}
       />
 
-      {/* Signup Modal */}
       <SignupModal
-        isOpen={signupOpen}
-        onClose={() => setSignupOpen(false)}
-      />
-
-      {/* Side Drawer */}
-      <SideDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
+        isOpen={showSignup}
+        onClose={() => setShowSignup(false)}
       />
     </>
   );

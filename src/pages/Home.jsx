@@ -1,57 +1,51 @@
+import { useState } from "react";
+
 import Navbar from "../components/Navbar";
-import BannerSlider from "../components/BannerSlider";
-import DailyRewardCard from "../components/DailyRewardCard";
-import LuckySpinCard from "../components/LuckySpinCard";
-import GameCard from "../components/GameCard";
-import BottomNav from "../components/BottomNav";
-import WalletCard from "../components/WalletCard";
-import GameTabs from "../components/GameTabs";
+
+import ProfileCard from "../components/dashboard/ProfileCard";
+import DailyBonusCard from "../components/dashboard/DailyBonusCard";
+import ActionPanel from "../components/dashboard/ActionPanel";
+import DepositBanner from "../components/dashboard/DepositBanner";
+
+import Sidebar from "../components/sidebar/Sidebar";
+
+import GameGrid from "../components/games/GameGrid";
 
 export default function Home() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="bg-slate-950 text-white min-h-screen pb-24 flex justify-center">
-    <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[#080014] text-white">
 
-      <Navbar />
-      <WalletCard />
+      <Navbar setSidebarOpen={setSidebarOpen} />
 
-      <BannerSlider />
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
 
-      <div className="grid grid-cols-2 gap-4 p-4">
+      <div className="max-w-7xl mx-auto px-4 py-3">
 
-        <DailyRewardCard />
+        {/* Top Cards */}
 
-        <LuckySpinCard />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 
-      </div>
+          <ProfileCard />
 
-      <div className="px-4">
-        <GameTabs />
-        <h2 className="text-xl font-bold mb-4">
-          Popular Games
-        </h2>
+          <DailyBonusCard />
 
-        <div className="space-y-4">
-
-          <GameCard
-            title="🎨 Color Prediction"
-            subtitle="Predict colors and numbers"
-            color="bg-green-600"
-            link="/color"
-          />
-
-          <GameCard
-            title="🏗️ Tower Rush"
-            subtitle="Stack blocks and earn rewards"
-            color="bg-purple-600"
-            link="/tower"
-          />
+          <ActionPanel />
 
         </div>
 
-      </div>
+        {/* Games */}
 
-      <BottomNav />
+        <GameGrid />
+
+        {/* Deposit Banner */}
+
+        <DepositBanner />
+
       </div>
 
     </div>
