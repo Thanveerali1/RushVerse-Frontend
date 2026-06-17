@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import History from "./pages/History";
 import Tower from "./pages/Tower";
@@ -8,7 +8,7 @@ import ColorPrediction from "./pages/ColorPrediction";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
 
       <Routes>
 
@@ -31,7 +31,7 @@ function App() {
       </Routes>
       
 
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
